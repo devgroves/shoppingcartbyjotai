@@ -1,22 +1,36 @@
-import React from "react";
+import React, { useRef } from "react";
+import ReactDom from "react-dom";
 import { atom, useAtom } from "jotai";
+import Cart from "./cart.png";
 import "./jotai.css";
+
+//Counter means Number of Product
 export const counterAtom = atom(0);
+
+//this is the total price item
 export const priceAtom = atom(0);
+
+//price of the product
 export const redAtom = atom(5);
 export const cornAtom = atom(7);
 export const pineAtom = atom(10);
 export const bitterAtom = atom(20);
-//items in the Store
+
+//number of products in Store
 export const totalRed = atom(5);
 export const totalCorn = atom(3);
 export const totalPine = atom(8);
 export const totalBitter = atom(4);
+
+//modal
+export const modalShown = atom(false);
+//main Component
 export default function JotaiExample() {
+  const [showModal] = useAtom(modalShown);
   return (
     <div>
       <>
-        <CurrentCount />
+        {showModal ? <CurrentCount /> : ""}
         <CounterButton />
       </>
     </div>
@@ -24,6 +38,7 @@ export default function JotaiExample() {
 }
 
 export function CounterButton() {
+  const [showModal, setShowModal] = useAtom(modalShown);
   const [count, setCount] = useAtom(counterAtom);
   const [price, setPrice] = useAtom(priceAtom);
   const [red] = useAtom(redAtom);
@@ -35,16 +50,22 @@ export function CounterButton() {
   const [tCorn, settCorn] = useAtom(totalCorn);
   const [tPine, settPine] = useAtom(totalPine);
   const [tBitter, settBitter] = useAtom(totalBitter);
-  const handleClick = (val) => {
-    setCount((number) => number + 1); // Increment number
-    setPrice((number) => number + val);
+  //hanClick
+  const handleClick = (val, id, func, total) => {
+    const d = document.getElementById(id).value;
+    const d1 = parseInt(d);
+    console.log("d1", d1);
+    const prodPrice = d1 * val;
+    func(total - d1);
+    setCount((number) => number + d1); // Increment number
+    setPrice((number) => number + prodPrice);
   };
   //Price Component
   const PriceComponent = (v, count) => {
-    return <>{v === 0 ? "Out of Stock" : `${count}.00 X ${v}`}</>;
+    return <>{v === 0 ? <p style={{ color: "red" }}>Out of Stock</p> : `${count}.00 X ${v}`}</>;
   };
   //Button Component
-  const ButtonComponent = (value, total, func) => {
+  const ButtonComponent = (value, total, func, id) => {
     return (
       <>
         {total === 0 ? (
@@ -55,8 +76,8 @@ export function CounterButton() {
           <button
             className="btn btn-success cart-button btn-block"
             onClick={() => {
-              handleClick(value);
-              func(total - 1);
+              handleClick(value, id, func, total);
+              // func(total - 1);
             }}
           >
             <span className="dot">1</span>Add to cart
@@ -65,10 +86,19 @@ export function CounterButton() {
       </>
     );
   };
+  const openModal = () => {
+    setShowModal(true);
+  };
   return (
     <div>
-      <h1>Shopping Cart Example</h1>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-evenly", marginTop: 10 }}>
+        <h1>Shopping Cart Example</h1>
+        <button style={{ borderRadius: 10 }} onClick={openModal}>
+          <img src={Cart} alt="" width={50} />
+        </button>
+      </div>
       <hr />
+      <img src="https://wallpaperaccess.com/full/518054.jpg" height="400" width={"80%"} alt="" />
       <>
         <div className="wrapper">
           <div className="container">
@@ -82,11 +112,12 @@ export function CounterButton() {
                   <div className="product-details">
                     {" "}
                     <span className="font-weight-bold d-block">{PriceComponent(tRed, 5)}</span> <span>Red Redish</span>
-                    <div className="buttons d-flex flex-row">
+                    <div className="buttons d-flex flex-row justify-content-center">
                       <div className="cart">
-                        <i className="fa fa-shopping-cart"></i>
+                        {" "}
+                        <input type="number" id="first" style={{ width: 40 }} min="1" defaultValue={1} max={tRed} />
                       </div>{" "}
-                      {ButtonComponent(red, tRed, settRed)}
+                      {ButtonComponent(red, tRed, settRed, "first")}
                     </div>
                     <div className="weight">
                       {" "}
@@ -104,11 +135,12 @@ export function CounterButton() {
                   <div className="product-details">
                     {" "}
                     <span className="font-weight-bold d-block">{PriceComponent(tCorn, 7)}</span> <span>Corn</span>
-                    <div className="buttons d-flex flex-row">
+                    <div className="buttons d-flex flex-row justify-content-center">
                       <div className="cart">
-                        <i className="fa fa-shopping-cart"></i>
+                        {" "}
+                        <input type="number" id="second" style={{ width: 40 }} min="1" defaultValue={1} max={tCorn} />
                       </div>{" "}
-                      {ButtonComponent(corn, tCorn, settCorn)}
+                      {ButtonComponent(corn, tCorn, settCorn, "second")}
                     </div>
                     <div className="weight">
                       {" "}
@@ -127,11 +159,12 @@ export function CounterButton() {
                     {" "}
                     <span className="font-weight-bold d-block">{PriceComponent(tPine, 10)}</span>{" "}
                     <span>Pine Apple</span>
-                    <div className="buttons d-flex flex-row">
+                    <div className="buttons d-flex flex-row justify-content-center">
                       <div className="cart">
-                        <i className="fa fa-shopping-cart"></i>
+                        {" "}
+                        <input type="number" id="pine" style={{ width: 40 }} min="1" defaultValue={1} max={tPine} />
                       </div>{" "}
-                      {ButtonComponent(pine, tPine, settPine)}
+                      {ButtonComponent(pine, tPine, settPine, "pine")}
                     </div>
                     <div className="weight">
                       {" "}
@@ -150,11 +183,12 @@ export function CounterButton() {
                     {" "}
                     <span className="font-weight-bold d-block">{PriceComponent(tBitter, 20)}</span>{" "}
                     <span>Bitter Gourd</span>
-                    <div className="buttons d-flex flex-row">
+                    <div className="buttons d-flex flex-row justify-content-center">
                       <div className="cart">
-                        <i className="fa fa-shopping-cart"></i>
+                        {" "}
+                        <input type="number" id="bitter" style={{ width: 40 }} min="1" defaultValue={1} max={tBitter} />
                       </div>{" "}
-                      {ButtonComponent(bitter, tBitter, settBitter)}
+                      {ButtonComponent(bitter, tBitter, settBitter, "bitter")}
                     </div>
                     <div className="weight">
                       {" "}
@@ -172,29 +206,47 @@ export function CounterButton() {
 }
 
 function CurrentCount() {
+  const [showModal, setShowModal] = useAtom(modalShown);
   const [count, setCount] = useAtom(counterAtom);
   const [price, setPrice] = useAtom(priceAtom);
-  return (
-    <div>
-      <h3>Your Cart</h3>
-      <h6>Please add some products to cart.</h6>
-      <p>Total Product: {count}</p>
-      <p>Total Price: $ {price}</p>
-      {count === 0 ? (
-        <button className="btn btn-success cart-button btn-block" disabled>
-          Checkout
+  const modalRef = useRef();
+  const closeModal = (e) => {
+    if (e.target === modalRef.current) {
+      setShowModal(false);
+    }
+  };
+
+  return ReactDom.createPortal(
+    <div className="container" ref={modalRef} onClick={closeModal}>
+      <div className="modal">
+        <>
+          <div>
+            <h3>Your Cart</h3>
+            {count === 0 && <h6>Please add some products to cart.</h6>}
+            <p>Total Product: {count}</p>
+            <p>Total Price: $ {price}</p>
+            {count === 0 ? (
+              <button className="btn btn-success cart-button btn-block" disabled>
+                Checkout
+              </button>
+            ) : (
+              <button
+                className="btn btn-success cart-button btn-block"
+                onClick={() => {
+                  setCount(0);
+                  setPrice(0);
+                }}
+              >
+                Checkout
+              </button>
+            )}
+          </div>
+        </>
+        <button className="button1" onClick={() => setShowModal(false)}>
+          X
         </button>
-      ) : (
-        <button
-          className="btn btn-success cart-button btn-block"
-          onClick={() => {
-            setCount(0);
-            setPrice(0);
-          }}
-        >
-          Checkout
-        </button>
-      )}
-    </div>
+      </div>
+    </div>,
+    document.getElementById("portal")
   );
 }
