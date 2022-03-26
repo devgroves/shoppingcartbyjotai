@@ -7,6 +7,11 @@ export const redAtom = atom(5);
 export const cornAtom = atom(7);
 export const pineAtom = atom(10);
 export const bitterAtom = atom(20);
+//items in the Store
+export const totalRed = atom(5);
+export const totalCorn = atom(3);
+export const totalPine = atom(8);
+export const totalBitter = atom(4);
 export default function JotaiExample() {
   return (
     <div>
@@ -25,11 +30,41 @@ export function CounterButton() {
   const [corn] = useAtom(cornAtom);
   const [pine] = useAtom(pineAtom);
   const [bitter] = useAtom(bitterAtom);
+  //Store
+  const [tRed, settRed] = useAtom(totalRed);
+  const [tCorn, settCorn] = useAtom(totalCorn);
+  const [tPine, settPine] = useAtom(totalPine);
+  const [tBitter, settBitter] = useAtom(totalBitter);
   const handleClick = (val) => {
     setCount((number) => number + 1); // Increment number
     setPrice((number) => number + val);
   };
-
+  //Price Component
+  const PriceComponent = (v, count) => {
+    return <>{v === 0 ? "Out of Stock" : `${count}.00 X ${v}`}</>;
+  };
+  //Button Component
+  const ButtonComponent = (value, total, func) => {
+    return (
+      <>
+        {total === 0 ? (
+          <button className="btn btn-success cart-button btn-block" onClick={() => handleClick(value)} disabled>
+            <span className="dot">1</span>Add to cart
+          </button>
+        ) : (
+          <button
+            className="btn btn-success cart-button btn-block"
+            onClick={() => {
+              handleClick(value);
+              func(total - 1);
+            }}
+          >
+            <span className="dot">1</span>Add to cart
+          </button>
+        )}
+      </>
+    );
+  };
   return (
     <div>
       <h1>Shopping Cart Example</h1>
@@ -42,18 +77,16 @@ export function CounterButton() {
                 <div className="card p-3">
                   <div className="text-center">
                     {" "}
-                    <img src="https://i.imgur.com/w2rCsEw.jpg" width="200" />{" "}
+                    <img src="https://i.imgur.com/w2rCsEw.jpg" width="200" alt="" />{" "}
                   </div>
                   <div className="product-details">
                     {" "}
-                    <span className="font-weight-bold d-block">$ 5.00</span> <span>Red Redish</span>
+                    <span className="font-weight-bold d-block">{PriceComponent(tRed, 5)}</span> <span>Red Redish</span>
                     <div className="buttons d-flex flex-row">
                       <div className="cart">
                         <i className="fa fa-shopping-cart"></i>
                       </div>{" "}
-                      <button className="btn btn-success cart-button btn-block" onClick={() => handleClick(red)}>
-                        <span className="dot">1</span>Add to cart
-                      </button>
+                      {ButtonComponent(red, tRed, settRed)}
                     </div>
                     <div className="weight">
                       {" "}
@@ -66,18 +99,16 @@ export function CounterButton() {
                 <div className="card p-3">
                   <div className="text-center">
                     {" "}
-                    <img src="https://i.imgur.com/ZRUetRF.jpg" width="200" />{" "}
+                    <img src="https://i.imgur.com/ZRUetRF.jpg" width="200" alt="" />{" "}
                   </div>
                   <div className="product-details">
                     {" "}
-                    <span className="font-weight-bold d-block">$ 7.00</span> <span>Corn</span>
+                    <span className="font-weight-bold d-block">{PriceComponent(tCorn, 7)}</span> <span>Corn</span>
                     <div className="buttons d-flex flex-row">
                       <div className="cart">
                         <i className="fa fa-shopping-cart"></i>
                       </div>{" "}
-                      <button className="btn btn-success cart-button btn-block" onClick={() => handleClick(corn)}>
-                        <span className="dot">1</span>Add to cart{" "}
-                      </button>
+                      {ButtonComponent(corn, tCorn, settCorn)}
                     </div>
                     <div className="weight">
                       {" "}
@@ -90,19 +121,17 @@ export function CounterButton() {
                 <div className="card p-3">
                   <div className="text-center">
                     {" "}
-                    <img src="https://i.imgur.com/0M7pldG.jpg" width="200" />{" "}
+                    <img src="https://i.imgur.com/0M7pldG.jpg" width="200" alt="" />{" "}
                   </div>
                   <div className="product-details">
                     {" "}
-                    <span className="font-weight-bold d-block">$10.00</span> <span>Pine Apple</span>
+                    <span className="font-weight-bold d-block">{PriceComponent(tPine, 10)}</span>{" "}
+                    <span>Pine Apple</span>
                     <div className="buttons d-flex flex-row">
                       <div className="cart">
                         <i className="fa fa-shopping-cart"></i>
                       </div>{" "}
-                      <button className="btn btn-success cart-button btn-block" onClick={() => handleClick(pine)}>
-                        <span className="dot">1</span>
-                        Add to cart{" "}
-                      </button>
+                      {ButtonComponent(pine, tPine, settPine)}
                     </div>
                     <div className="weight">
                       {" "}
@@ -115,18 +144,17 @@ export function CounterButton() {
                 <div className="card p-3">
                   <div className="text-center">
                     {" "}
-                    <img src="https://i.imgur.com/emb60L5.jpg" width="200" />{" "}
+                    <img src="https://i.imgur.com/emb60L5.jpg" width="200" alt="" />{" "}
                   </div>
                   <div className="product-details">
                     {" "}
-                    <span className="font-weight-bold d-block">$ 20.00</span> <span>Bitter Gourd</span>
+                    <span className="font-weight-bold d-block">{PriceComponent(tBitter, 20)}</span>{" "}
+                    <span>Bitter Gourd</span>
                     <div className="buttons d-flex flex-row">
                       <div className="cart">
                         <i className="fa fa-shopping-cart"></i>
                       </div>{" "}
-                      <button className="btn btn-success cart-button btn-block" onClick={() => handleClick(bitter)}>
-                        <span className="dot">1</span>Add to cart{" "}
-                      </button>
+                      {ButtonComponent(bitter, tBitter, settBitter)}
                     </div>
                     <div className="weight">
                       {" "}
@@ -144,14 +172,29 @@ export function CounterButton() {
 }
 
 function CurrentCount() {
-  const [count] = useAtom(counterAtom);
-  const [price] = useAtom(priceAtom);
+  const [count, setCount] = useAtom(counterAtom);
+  const [price, setPrice] = useAtom(priceAtom);
   return (
     <div>
       <h3>Your Cart</h3>
       <h6>Please add some products to cart.</h6>
       <p>Total Product: {count}</p>
       <p>Total Price: $ {price}</p>
+      {count === 0 ? (
+        <button className="btn btn-success cart-button btn-block" disabled>
+          Checkout
+        </button>
+      ) : (
+        <button
+          className="btn btn-success cart-button btn-block"
+          onClick={() => {
+            setCount(0);
+            setPrice(0);
+          }}
+        >
+          Checkout
+        </button>
+      )}
     </div>
   );
 }
