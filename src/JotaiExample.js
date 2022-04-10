@@ -2,37 +2,16 @@ import React from "react";
 // import ReactDom from "react-dom";
 import { atom, useAtom } from "jotai";
 import Cart from "./cart.png";
-// import "./jotai.css";
-import { Navbar, Container, Offcanvas, Nav } from "react-bootstrap";
+import { Navbar, Container, Offcanvas } from "react-bootstrap";
 import productsJson from "./Products.json";
 import ProductCard from "./ProductCard";
 
 export const cartAtom = atom([]);
 
-//Counter means Number of Product
-export const counterAtom = atom(0);
-
-//this is the total price item
-export const priceAtom = atom(0);
-
-//price of the product
-export const redAtom = atom(5);
-export const cornAtom = atom(7);
-export const pineAtom = atom(10);
-export const bitterAtom = atom(20);
-
-//number of products in Store
-export const totalRed = atom(5);
-export const totalCorn = atom(3);
-export const totalPine = atom(8);
-export const totalBitter = atom(4);
-
-//modal
-export const modalShown = atom(false);
 //main Component
 export default function JotaiExample() {
-  const [showModal] = useAtom(modalShown);
   const [cart, setCart] = useAtom(cartAtom);
+  const forceUpdate = React.useState()[1].bind(null, {});
   return (
     <div>
       <>
@@ -51,7 +30,7 @@ export default function JotaiExample() {
                   <div>
                     <ul className="cart-items">
                       {cart.map((product) => {
-                        console.log("product", product);
+                        // console.log("product", product);
                         return (
                           <li className="cart-item" key={product.name}>
                             <img className="product-image" src={product.image} alt="" />
@@ -67,10 +46,12 @@ export default function JotaiExample() {
                             </div>
                             <button
                               className="product-remove"
-                              onClick={
-                                () => console.log("first")
-                                //handleRemove(product.id)
-                              }
+                              onClick={() => {
+                                const index = cart.findIndex((pro) => pro.id === product.id);
+                                cart.splice(index, 1);
+                                setCart(cart);
+                                forceUpdate();
+                              }}
                             >
                               ×
                             </button>
@@ -81,8 +62,11 @@ export default function JotaiExample() {
                     <div className="action-block">
                       <button
                         type="button"
-                        className={{ disabled: productsJson && productsJson.length === 0 }}
-                        // onClick={handleProceedCheckout}
+                        className={{ disabled: cart && cart.length === 0 }}
+                        onClick={() => {
+                          setCart([]);
+                          forceUpdate();
+                        }}
                       >
                         PROCEED TO CHECKOUT
                       </button>
