@@ -1,8 +1,9 @@
-import React, { useRef } from "react";
-import ReactDom from "react-dom";
+import React from "react";
+// import ReactDom from "react-dom";
 import { atom, useAtom } from "jotai";
 import Cart from "./cart.png";
 import "./jotai.css";
+import { Navbar, Container, Offcanvas, Nav } from "react-bootstrap";
 
 //Counter means Number of Product
 export const counterAtom = atom(0);
@@ -30,6 +31,23 @@ export default function JotaiExample() {
   return (
     <div>
       <>
+        <Navbar bg="light" expand={false}>
+          <Container fluid>
+            <Navbar.Brand href="#">Shopping Cart Example</Navbar.Brand>
+            <Navbar.Toggle aria-controls="offcanvasNavbar">
+              <img src={Cart} alt="" height={30} width={30} />
+            </Navbar.Toggle>
+            <Navbar.Offcanvas id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel" placement="end">
+              <Offcanvas.Header closeButton>
+                <Offcanvas.Title id="offcanvasNavbarLabel">Your Cart</Offcanvas.Title>
+              </Offcanvas.Header>
+              <Offcanvas.Body>
+                <CurrentCount />
+              </Offcanvas.Body>
+            </Navbar.Offcanvas>
+          </Container>
+        </Navbar>
+
         {showModal ? <CurrentCount /> : ""}
         <CounterButton />
       </>
@@ -86,19 +104,11 @@ export function CounterButton() {
       </>
     );
   };
-  const openModal = () => {
-    setShowModal(true);
-  };
+  // const openModal = () => {
+  //   setShowModal(true);
+  // };
   return (
     <div>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-evenly", marginTop: 10 }}>
-        <h1>Shopping Cart Example</h1>
-        <button style={{ borderRadius: 10 }} onClick={openModal}>
-          <img src={Cart} alt="" width={50} />
-        </button>
-      </div>
-      <hr />
-      <img src="https://wallpaperaccess.com/full/518054.jpg" height="400" width={"80%"} alt="" />
       <>
         <div className="wrapper">
           <div className="container">
@@ -206,47 +216,38 @@ export function CounterButton() {
 }
 
 function CurrentCount() {
-  const [showModal, setShowModal] = useAtom(modalShown);
+  // const [showModal, setShowModal] = useAtom(modalShown);
   const [count, setCount] = useAtom(counterAtom);
   const [price, setPrice] = useAtom(priceAtom);
-  const modalRef = useRef();
-  const closeModal = (e) => {
-    if (e.target === modalRef.current) {
-      setShowModal(false);
-    }
-  };
+  // const modalRef = useRef();
+  // const closeModal = (e) => {
+  //   if (e.target === modalRef.current) {
+  //     setShowModal(false);
+  //   }
+  // };
 
-  return ReactDom.createPortal(
-    <div className="container" ref={modalRef} onClick={closeModal}>
-      <div className="modal">
-        <>
-          <div>
-            <h3>Your Cart</h3>
-            {count === 0 && <h6>Please add some products to cart.</h6>}
-            <p>Total Product: {count}</p>
-            <p>Total Price: $ {price}</p>
-            {count === 0 ? (
-              <button className="btn btn-success cart-button btn-block" disabled>
-                Checkout
-              </button>
-            ) : (
-              <button
-                className="btn btn-success cart-button btn-block"
-                onClick={() => {
-                  setCount(0);
-                  setPrice(0);
-                }}
-              >
-                Checkout
-              </button>
-            )}
-          </div>
-        </>
-        <button className="button1" onClick={() => setShowModal(false)}>
-          X
-        </button>
+  return (
+    <>
+      <div>
+        {count === 0 && <h6>Please add some products to cart.</h6>}
+        <p>Total Product: {count}</p>
+        <p>Total Price: $ {price}</p>
+        {count === 0 ? (
+          <button className="btn btn-success cart-button btn-block" disabled>
+            Checkout
+          </button>
+        ) : (
+          <button
+            className="btn btn-success cart-button btn-block"
+            onClick={() => {
+              setCount(0);
+              setPrice(0);
+            }}
+          >
+            Checkout
+          </button>
+        )}
       </div>
-    </div>,
-    document.getElementById("portal")
+    </>
   );
 }
