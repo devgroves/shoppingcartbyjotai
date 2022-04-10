@@ -17,10 +17,8 @@ export default function JotaiExample() {
       <>
         <Navbar bg="light" expand={false}>
           <Container fluid>
-            <Navbar.Brand href="#">Shopping Cart Example</Navbar.Brand>
-            <Navbar.Toggle aria-controls="offcanvasNavbar">
-              <img src={Cart} alt="" height={30} width={30} />
-            </Navbar.Toggle>
+            <Navbar.Brand></Navbar.Brand>
+            <Navbar.Brand>Shopping Cart Example</Navbar.Brand>
             <Navbar.Offcanvas id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel" placement="end">
               <Offcanvas.Header closeButton>
                 <Offcanvas.Title id="offcanvasNavbarLabel">Your Cart</Offcanvas.Title>
@@ -75,6 +73,9 @@ export default function JotaiExample() {
                 </>
               </Offcanvas.Body>
             </Navbar.Offcanvas>
+            <Navbar.Toggle aria-controls="offcanvasNavbar">
+              <img src={Cart} alt="" height={30} width={30} />
+            </Navbar.Toggle>
           </Container>
         </Navbar>
 
