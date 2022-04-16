@@ -15,7 +15,7 @@ export default function JotaiExample() {
   return (
     <div>
       <>
-        <Navbar bg="light" expand={false}>
+        <Navbar bg="light" expand={false} fixed="top">
           <Container fluid>
             <Navbar.Brand></Navbar.Brand>
             <Navbar.Brand>Shopping Cart Example</Navbar.Brand>
