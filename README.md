@@ -2,13 +2,26 @@
 
 Shopping cart example shown in redux offical site is rewritten in jotai to explain the easness and light weightness of the framework
 
-## Installation steps
+# Demo Snap
 
-git clone https://github.com/devgroves/shoppingcartbyjotai
+User workflow of ecommerce site by selecting the item and adding to cart is shown in the video.
 
-npm install
+<img src="./reactecommercedemo.gif" alt="ecommerce demo snapshot" />
 
-npm start
+
+# Installation steps
+
+Clone the project
+
+    git clone https://github.com/devgroves/shoppingcartbyjotai
+
+Then install the dependencies
+
+    npm install
+
+Start the project using below command
+
+    npm start
 
 ### Introduction
 
