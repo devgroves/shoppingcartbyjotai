@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useAtom } from "jotai";
-import { cartAtom } from "./JotaiExample";
+import { cartAtom } from "./Atoms";
 const ProductCard = ({ data }) => {
   const [isAdded, setIsAdded] = useState(false);
   const [value, setValue] = useState(1);
   const [cart, setCart] = useAtom(cartAtom);
-  const { image, name, price, id, stock } = data;
+  const { image, name, price } = data;
 
   const handleAddToCart = () => {
     const product = { ...data, quantity: value };
