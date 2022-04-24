@@ -1,15 +1,17 @@
 import React from "react";
 // import ReactDom from "react-dom";
-import { atom, useAtom } from "jotai";
+import { useAtom } from "jotai";
 import Cart from "./cart.png";
 import { Navbar, Container, Offcanvas } from "react-bootstrap";
 import productsJson from "./Products.json";
 import ProductCard from "./ProductCard";
+import CartDisplay from "./CartDisplay";
+import { cartAtom } from "./Atoms";
 
-export const cartAtom = atom([]);
+
 
 //main Component
-export default function JotaiExample() {
+export default function Home() {
   const [cart, setCart] = useAtom(cartAtom);
   const forceUpdate = React.useState()[1].bind(null, {});
   return (
@@ -18,7 +20,7 @@ export default function JotaiExample() {
         <Navbar bg="light" expand={false} fixed="top">
           <Container fluid>
             <Navbar.Brand></Navbar.Brand>
-            <Navbar.Brand>Shopping Cart Example</Navbar.Brand>
+            <Navbar.Brand className="headerText">Shopping Cart Example</Navbar.Brand>
             <Navbar.Offcanvas id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel" placement="end">
               <Offcanvas.Header closeButton>
                 <Offcanvas.Title id="offcanvasNavbarLabel">Your Cart</Offcanvas.Title>
@@ -26,37 +28,7 @@ export default function JotaiExample() {
               <Offcanvas.Body>
                 <>
                   <div>
-                    <ul className="cart-items">
-                      {cart.map((product) => {
-                        // console.log("product", product);
-                        return (
-                          <li className="cart-item" key={product.name}>
-                            <img className="product-image" src={product.image} alt="" />
-                            <div className="product-info">
-                              <p className="product-name">{product.name}</p>
-                              <p className="product-price">{product.price}</p>
-                            </div>
-                            <div className="product-total">
-                              <p className="quantity">
-                                {`${product.quantity} ${product.quantity > 1 ? "Nos." : "No."}`}
-                              </p>
-                              <p className="amount">{product.quantity * product.price}</p>
-                            </div>
-                            <button
-                              className="product-remove"
-                              onClick={() => {
-                                const index = cart.findIndex((pro) => pro.id === product.id);
-                                cart.splice(index, 1);
-                                setCart(cart);
-                                forceUpdate();
-                              }}
-                            >
-                              ×
-                            </button>
-                          </li>
-                        );
-                      })}
-                    </ul>
+                  <CartDisplay/>
                     <div className="action-block">
                       <button
                         type="button"
@@ -79,13 +51,13 @@ export default function JotaiExample() {
           </Container>
         </Navbar>
 
-        <CounterButton />
+        <Products />
       </>
     </div>
   );
 }
 
-export function CounterButton() {
+export function Products() {
   return (
     <div>
       <>

@@ -1,13 +1,13 @@
 import "./App.css";
 import { Provider } from "jotai";
-import JotaiExample from "./JotaiExample.js";
+import Home from "./Home.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./assets/scss/style.scss";
 function App() {
   return (
     <Provider>
       <div className="App">
-        <JotaiExample />
+        <Home />
       </div>
     </Provider>
   );
